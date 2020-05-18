@@ -20,3 +20,19 @@ It currently lacks:
 * write interface to use `DoPut` to write Spark dataframes back to an Arrow Flight endpoint
 * leverage the transactional capabilities of the Spark Source V2 interface
 * publish benchmark test
+
+## Example
+
+```python
+# ensure spark knows of the jar:
+conf = SparkConf().set("spark.jars", "/home/hadoop/flight-spark-source-1.0-SNAPSHOT-shaded.jar")
+conf.set("spark.sql.execution.arrow.enabled", "true")
+...
+reader = sqlContext.read.format("cdap.org.apache.arrow.flight.spark") 
+df = (reader.option("port", port)
+            .option("host", host)
+            .option("username", username)
+            .option("password", password)
+            .option("parallel", parallel)
+            .load(sql))
+```
